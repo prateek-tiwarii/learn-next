@@ -5,7 +5,7 @@ import { ApiResponse } from "@/types/apiResponse";
 
 
 export async function sendVerificationEmail(
-    email: string,
+    username: string,
     password: string,
     verifycode: string
 ): Promise<ApiResponse>{
@@ -16,7 +16,7 @@ export async function sendVerificationEmail(
         from: 'Acme <onboarding@resend.dev>',
         to: ['delivered@resend.dev'],
         subject: 'verification satus',
-        react: VerificationEmail({ username: email, otp: verifycode}),
+        react: VerificationEmail({ username ,  otp: verifycode}),
       });
 
 
