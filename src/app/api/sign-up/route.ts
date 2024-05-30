@@ -50,6 +50,8 @@ export async function POST(request :Request){
                         existingUserByEmail.verifycode = verifycode;
                         existingUserByEmail.verifycodeexpiry = expiryDate;
 
+                        await existingUserByEmail.save();
+
 
                     }
 
