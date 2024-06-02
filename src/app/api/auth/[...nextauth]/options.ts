@@ -38,11 +38,13 @@ export const authOptions : NextAuthOptions = {
 
              const isPasswordCorrect  = await bcrypt.compare(credentials.password, user.password)
                      
-             if(!isPasswordCorrect){
-                    throw new Error("Password is incorrect")
+             if(isPasswordCorrect){
+                   return user;
              }
-
-                return { email: user.email, username: user.username, id: user._id }
+                else{
+                    throw new Error("Password is incorrect")
+                }
+                
 
               } catch (error : any) {
 
@@ -52,5 +54,39 @@ export const authOptions : NextAuthOptions = {
 
             }
         })
-    ]
+    ],
+
+    callbacks:{
+       
+        async jwt({token , user}){
+
+            if(user){
+                token._id = user._id?.toString()
+                token.isverified = user.isverified;
+                token.isacceptingmessages = user.isacceptingmessages;
+                token.username =  user.username;
+                
+
+            }
+            return  token;
+        },
+
+        async session({session , token}){
+            return session;
+        }
+    },
+
+    pages:{
+
+        signIn : "/sign-in",
+        
+    },
+    session:{
+        strategy : "jwt",
+
+    },
+
+    secret: process.env.NEXT_AUTH_SECRET
+
+
 }
