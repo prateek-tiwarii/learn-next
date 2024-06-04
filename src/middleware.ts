@@ -1,5 +1,5 @@
 import { NextRequest , NextResponse } from "next/server";
-import types {NextRequest} from "next/server";
+// import types {NextRequest} from "next/server";
 export {default} from "next-auth/middleware";
 import { getToken } from "next-auth/jwt";
 import { NextURL } from "next/dist/server/web/next-url";
@@ -11,8 +11,10 @@ import { NextURL } from "next/dist/server/web/next-url";
     const token = await getToken({req : request})
     const url = request.nextUrl
 
-    if(token && (url.pathname.startsWith('/sign-in'))){
-        
+    if(token && (url.pathname.startsWith('/sign-in')   || url.pathname.startsWith('/sign-in')   || url.pathname.startsWith('/verify') || url.pathname.startsWith('/') )){
+  
+        return NextResponse.redirect(new URL('/dashboard', request.url))
+
     }
     return NextResponse.redirect(new URL('/home', request.url))
  };
