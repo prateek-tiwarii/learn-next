@@ -1,22 +1,21 @@
 import { NextRequest , NextResponse } from "next/server";
-// import types {NextRequest} from "next/server";
 export {default} from "next-auth/middleware";
 import { getToken } from "next-auth/jwt";
-import { NextURL } from "next/dist/server/web/next-url";
-
 
 
  export async function middleware(request : NextRequest){
 
     const token = await getToken({req : request})
+    console.log( token)
     const url = request.nextUrl
 
-    if(token && (url.pathname.startsWith('/sign-in')   || url.pathname.startsWith('/sign-in')   || url.pathname.startsWith('/verify') || url.pathname.startsWith('/') )){
-  
+    if(token && (url.pathname.startsWith('/sign-in')   || url.pathname.startsWith('/sign-up')   || url.pathname.startsWith('/verify') || url.pathname.startsWith('/') )){
+        console.log("redirecting to dashboard");
         return NextResponse.redirect(new URL('/dashboard', request.url))
 
     }
-    return NextResponse.redirect(new URL('/home', request.url))
+    console.log("straight here")
+    // return NextResponse.redirect(new URL('/home', request.url))
  };
 
 
