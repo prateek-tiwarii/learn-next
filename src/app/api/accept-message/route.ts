@@ -79,28 +79,30 @@ export async function GET(request : Request){
 
     const userId = user._id;
 
-    const foundUser =  await UserModel.findById(userId);
-
-    if(!foundUser){
-        return Response.json({ 
-            success:false,
-            message:"User not found"
-        },{
-            status:404
-        })
-    }
-
-    else{
-        return Response.json({ 
-            success:true,
-            message:"user found",
-            isAcceptingMessages:foundUser.isacceptingmessages
-        },{
-            status:200
-        })
-    }
-
+  
     try {
+
+        const foundUser =  await UserModel.findById(userId);
+
+        if(!foundUser){
+            return Response.json({ 
+                success:false,
+                message:"User not found"
+            },{
+                status:404
+            })
+        }
+    
+        else{
+            return Response.json({ 
+                success:true,
+                message:"user found",
+                isAcceptingMessages:foundUser.isacceptingmessages
+            },{
+                status:200
+            })
+        }
+    
         
     } catch (error) {
 
