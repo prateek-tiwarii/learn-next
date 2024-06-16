@@ -1,5 +1,5 @@
 "use client"
-
+import { useDebounceValue } from 'usehooks-ts'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z  from "zod"
@@ -10,7 +10,7 @@ const Page = () => {
 
   const [username , setUsername] = useState("")
   const [usernameMessage ,  setUsernameMessage] = useState("")
-  const [ , setPassword] = useState("")
+  const [isSubmiting , setIsSubmiting] = useState(false);
   const [ isCheckingUsername , setIsCheckingUsername] = useState(false)
 
   return (
