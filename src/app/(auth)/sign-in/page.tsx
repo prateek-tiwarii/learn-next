@@ -82,8 +82,10 @@ const Page = () => {
       toast({
         title : "sign-up failed",
         description : errorMessage,
-        variant : destr
+        variant : "destructive"
       })
+
+      setIsSubmiting(false)
 
      }
   }
