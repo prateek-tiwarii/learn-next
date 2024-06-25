@@ -27,14 +27,13 @@ import { signIn } from 'next-auth/react';
 
 const SigninUser = () => {
   
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof signinSchemaValidation>>({
     resolver: zodResolver(signinSchemaValidation),
     defaultValues: {
-      email: '',
+      identifier: '',
       password: '',
     },
   });
@@ -65,7 +64,7 @@ const SigninUser = () => {
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
             Join True Feedback
           </h1>
-          <p className="mb-4">Sign up to start your anonymous adventure</p>
+          <p className="mb-4">SignIn to start your anonymous adventure</p>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -77,7 +76,6 @@ const SigninUser = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <Input {...field} name="email" />
-                  <p className='text-muted text-gray-400 text-sm'>We will send you a verification code</p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -94,29 +92,15 @@ const SigninUser = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className='w-full' disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Please wait
-                </>
-              ) : (
-                'Sign Up'
-              )}
+            <Button type="submit" className='w-full'>
+              SignIn
             </Button>
           </form>
         </Form>
-        <div className="text-center mt-4">
-          <p>
-            Already a member?{' '}
-            <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
-              Sign in
-            </Link>
-          </p>
-        </div>
+
       </div>
     </div>
-
+  );
 }
 
 export default SigninUser
