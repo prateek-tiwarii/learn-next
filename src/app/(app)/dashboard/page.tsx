@@ -12,11 +12,14 @@ import { ApiResponse } from "@/types/apiResponse";
 import { Button } from '@/components/ui/button';
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { MessageCard } from "@/components/MessageCard";
+import { Loader2, RefreshCcw } from "lucide-react";
+import { User } from "next-auth";
 
 const Dashboard = () => {
 
   const[messages , setMessages] = useState<Messages[]>([]);
-  const[loading , setIsLoading] = useState(false);
+  const[isLoading , setIsLoading] = useState(false);
   const [isSwitchLoading , setIsSwitchLoading] = useState(false);
   const {toast} = useToast();
 
@@ -92,33 +95,49 @@ const Dashboard = () => {
     fetchMessage();
     fetchAcceptMessages();
 
-    const handleSwitchChange = async()=>{
-      try {
-       const response =  await axios.post<ApiResponse>("/api/accept-message",{
-          acceptMessages : !acceptMessages}
-          )
-
-          setValue("acceptMessages" , !acceptMessages)
-          toast({
-            title : response.data.message,
-            variant : "default",
-          })
-      } 
-      
-      
-      catch (error) {
-
-        const axiosError =  error as AxiosError<ApiResponse>;
-        toast({
-          title : "ERROR",
-          description: axiosError.response?.data.message || "Failed to fetch",
-          variant : "destructive"
-        })
-        
-      }
-    }
 
   }, [session , setValue ,fetchAcceptMessages,fetchMessage])
+
+
+  const handleSwitchChange = async()=>{
+    try {
+     const response =  await axios.post<ApiResponse>("/api/accept-message",{
+        acceptMessages : !acceptMessages}
+        )
+
+        setValue("acceptMessages" , !acceptMessages)
+        toast({
+          title : response.data.message,
+          variant : "default",
+        })
+    } 
+    
+    
+    catch (error) {
+
+      const axiosError =  error as AxiosError<ApiResponse>;
+      toast({
+        title : "ERROR",
+        description: axiosError.response?.data.message || "Failed to fetch",
+        variant : "destructive"
+      })
+      
+    }
+  }
+
+  const {username} =  session?.user as User
+
+  const baseUrl = `${window.location.protocol}//${window.location.host}`
+
+  const profileUrl = `${baseUrl}/u/${username}`
+
+  const copyToClipboard = ()=>{
+    navigator.clipboard.writeText(profileUrl)
+    toast({
+      title : "Link Copied",
+      variant : "default",
+    })
+  }
 
   if(!session || !session.user){
     return <div>loading...</div>
@@ -159,7 +178,7 @@ const Dashboard = () => {
         variant="outline"
         onClick={(e) => {
           e.preventDefault();
-          fetchMessages(true);
+          fetchMessage(true);
         }}
       >
         {isLoading ? (
@@ -172,9 +191,9 @@ const Dashboard = () => {
         {messages.length > 0 ? (
           messages.map((message, index) => (
             <MessageCard
-              key={message._id}
+              key={message._id as string}
               message={message}
-              onMessageDelete={handleDeleteMessage}
+              onMessageDelete={handelDeleteMessage}
             />
           ))
         ) : (
